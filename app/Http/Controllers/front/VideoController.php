@@ -70,8 +70,6 @@ class VideoController extends Controller
         ->get();
         $video->tags = $tags;
 
-
-
         return response()->json($video);
     }
 

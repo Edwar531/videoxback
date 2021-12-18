@@ -15,11 +15,14 @@ class CreateImagesTable extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->string('url_path');
             $table->string('local_path');
             $table->enum('saved',[1,0])->default(0);
-            $table->unsignedBigInteger('gallery_id');
+            $table->unsignedBigInteger('gallery_id')->nullable();
             $table->foreign('gallery_id')->references('id')->on('galleries');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
