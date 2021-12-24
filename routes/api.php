@@ -27,13 +27,26 @@ Route::middleware(['cors'])->group(function () {
 
             Route::post("generate-token-update-email", 'front\UserController@generate_token_update_email');
 
-            Route::post("update-email", 'front\UserController@update_email');
-            Route::post("edit-password-profile", 'front\UserController@edit_password_profile');
+            Route::post("confirm-update-email", 'front\UserController@confirm_update_email');
+            Route::post("change-password-profile", 'front\UserController@change_password_profile');
             Route::post("update-personal-info", 'front\UserController@update_personal_info');
             Route::post("update-document-data", 'front\UserController@update_document_data');
             Route::post("update-contact-information", 'front\UserController@update_contact_information');
 
+            Route::post("update-paypal", 'front\UserController@update_paypal');
+            Route::post("add-bank", 'front\UserController@add_bank');
+            Route::post("update-bank", 'front\UserController@update_bank');
 
+
+
+
+
+
+            Route::get("data-contact", 'front\UserController@data_contact');
+            Route::post("get-states", 'front\UserController@get_states');
+            Route::post("get-cities", 'front\UserController@get_cities');
+
+            Route::post('authenticated', 'AuthController@authenticated');
 
             Route::post('refresh-token', 'AuthController@refresh');
             Route::post('validate-token', 'AuthController@validateToken');
@@ -58,7 +71,7 @@ Route::middleware(['cors'])->group(function () {
         Route::get('galleries', 'front\GalleryController@galleries');
         Route::get('get-video', 'front\VideoController@get_video');
         Route::get('videos','front\VideoController@videos');
-        Route::get('mail_view','AuthController@mail_view');
+        Route::get('mail-view','AuthController@mail_view');
         Route::get('mail_confirm/{email}/{token}', 'AuthController@mail_confirm');
         Route::post('login', 'AuthController@login');
         Route::post('register', 'AuthController@register');

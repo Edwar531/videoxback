@@ -40,14 +40,16 @@
                     " class="logo-mail" style="" data-auto-embed="attachment"/>
                <img class="logo-mail" src="{!! asset('public\images\default\Logo Eska Dental completo.png') !!}" alt="">  -->
             <br>
-            <h2 style="color:black">Cambio de correo de tu cuenta OnlyFetixx</h2>
+            <h2 style="color:grey">Cambio de correo de tu cuenta OnlyFetixx</h2>
             <br>
-            <h3 style="color:grey"> El código necesario para confirmar el cambio de correo: <h2>{{$data['token']}}</h2>  </h3>
+            <h3 style=""> Tu codigo de confirmacion de cambio de correo es: </h3>
 
+
+            <h1 style="border:dotted 1px grey;width:200px;background:rgb(235, 234, 234);margin:auto"> {{$change_email["token"]}} </h1>
             <br>
-            <p style="color:grey" >Si usted no desea cambiar el correo de su cuenta onlyfetixx ignore este mensaje. </p>
+            <p style="color:grey" >Este codigo sera obsoleto despues de una 2 horas desu generación. Si usted no desea cambiar el correo de su cuenta onlyfetixx, o es ajeno a esta operación, solo ignore este mensaje. </p>
             <br>
-            <p class="" style="text-align:center;line-height:1;font-size:14px;color:black">
+            <p class="" style="text-align:center;line-height:1;font-size:14px;color:grey">
                No responder este mensaje
             </p>
         </div>

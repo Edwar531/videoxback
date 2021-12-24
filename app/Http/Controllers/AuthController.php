@@ -18,6 +18,13 @@ class AuthController extends Controller
      *
      * @return void
      */
+
+
+    public function authenticated(Request $request)
+    {
+        return response()->json(["result" => "ok"]);
+    }
+
     public function __construct()
     {
         // $this->middleware('auth:api', ['except' => ['login','register','validateToken']]);
@@ -36,8 +43,8 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'usuarioOcorreo' => 'required',
-            'clave' => 'required',
+            'alias_or_email' => 'required',
+            'password' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -45,20 +52,20 @@ class AuthController extends Controller
         }
 
         // verifica si existe usuario
-        $user = User::where("alias", $request->usuarioOcorreo)->orWhere("correo", $request->usuarioOcorreo)->first();
+        $user = User::where("alias", $request->alias_or_email)->orWhere("email", $request->alias_or_email)->first();
         if ($user == Null) {
             return response()->json(["error" => "El alias o correo no ha sido registrado."]);
         }
 
-        if (Hash::check($request->clave, $user->clave)) {
+        if (Hash::check($request->password, $user->password)) {
 
 
-            if ($user->correo_verificado_en == null) {
+            if ($user->date_email_verified == null) {
                 return response()->json(["error" => "El correo de esta cuenta aún no ha sido verificado."]);
             }
 
             $token = JWTAuth::fromUser($user);
-            $user = $user->only('id', 'alias', 'correo', 'nombre_completo');
+            $user = $user->only('id', 'alias', 'email', 'name','last_name');
             $user['token'] = $token;
             $user['expiration'] = \Carbon\Carbon::now()->format('Y/m/d H:i:s');
             return response()->json($user);
@@ -79,16 +86,18 @@ class AuthController extends Controller
     // }
 
     public function mail_view(Request $request){
-        return view("mails.email_confirm");
+        // return view("mails.email_confirm");
+        return view("mails.change_email");
+
     }
 
     public function mail_confirm(Request $request){
-        $user = User::where("correo",$request->email)->first();
+        $user = User::where("email",$request->email)->first();
         if( $user == Null){
             return redirect()->to(env("ENDPOINT_FRONT")."?account=not-confirmed");
         }
-        if($user->token_correo == $request->token){
-            $user->correo_verificado_en = \Carbon\Carbon::now()->format("Y-m-d H:i:s");
+        if($user->token_email == $request->token){
+            $user->date_email_verified = \Carbon\Carbon::now()->format("Y-m-d H:i:s");
             $user->save();
             return redirect()->to(env("ENDPOINT_FRONT")."?account=confirmed");
         }
@@ -99,39 +108,39 @@ class AuthController extends Controller
     public function register(Request $request){
         $validator = Validator::make($request->all(), [
             'alias' => 'required|unique:users|max:25',
-            'nombres' => 'required|max:30',
-            'apellidos' => 'required|max:30',
+            'name' => 'required|max:30',
+            'last_anme' => 'required|max:30',
             'correo' => 'required|max:40|email|unique:users',
-            'clave' => 'required|max:30|min:8',
-            'confirmar_clave' => 'required|max:30|min:8',
+            'password' => 'required|max:30|min:8',
+            'confirm_password' => 'required|max:30|min:8',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['result' => 'error', 'errors' => $validator->errors()]);
         }
 
-        if($request->clave != $request->confirmar_clave){
+        if($request->password != $request->confirm_password){
             return response()->json(['result' => 'error', 'Los campos de las contraseñas deben coincidir.']);
         }
 
         $user = new User();
         $user->alias = $request->alias;
-        $user->correo = $request->correo;
-        $user->nombres = $request->nombres;
-        $user->apellidos = $request->apellidos;
-        $user->clave = bcrypt($request->clave);
-        $user->nombre_completo = $user->nombres." ".$user->apellidos;
+        $user->email = $request->email;
+        $user->name = $request->name;
+        $user->last_anme = $request->last_anme;
+        $user->password = bcrypt($request->password);
+
         $user->role = "Cliente";
-        $token_correo = str_replace('/', '', Hash::make(\Carbon\Carbon::now()->format("YmdHis").Str::random(10)));
-        $user->token_correo = $token_correo;
+        $token_email = str_replace('/', '', Hash::make(\Carbon\Carbon::now()->format("YmdHis").Str::random(10)));
+        $user->token_email = $token_email;
         $user->save();
 
-        $data = ['data'=>['email'=>$user->correo,'token'=>$token_correo]];
+        $data = ['data'=>['email'=>$user->email,'token'=>$token_email]];
 
         Mail::send('mails.email_confirm',$data,function($message) use($user){
             $message->subject('Confirma tu cuenta de Onlifetixxx');
             // $message->to('edtalentoinformatico@gmail.com');
-            $message->to($user->correo);
+            $message->to($user->email);
 
         });
 

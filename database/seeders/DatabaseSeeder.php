@@ -18,12 +18,11 @@ class DatabaseSeeder extends Seeder
 
         DB::table('users')->insert([
             'alias'=>'Admin',
-            'nombres'=>'Edwar',
-            'apellidos'=>'Villavicencio',
-            'nombre_completo'=>'Edwar Villavicencio',
-            'correo'=>'admin@gmail.com',
-            'correo_verificado_en'=>'2021-12-01 19:29:59',
-            'clave'=>bcrypt('12345678'),
+            'name'=>'Edwar',
+            'last_name'=>'Villavicencio',
+            'email'=>'admin@gmail.com',
+            'password'=>bcrypt('12345678'),
+            'date_email_verified'=>"2021-12-01 05:05:05",
         ]);
 
         DB::table('tags')->insert([
