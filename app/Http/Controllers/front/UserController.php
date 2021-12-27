@@ -363,16 +363,17 @@ class UserController extends Controller
     }
 
 
-    public function add_bank(Request $request){
+    public function update_bank(Request $request){
         $validator = Validator::make($request->all(), [
             'country_id'=>'required',
             'name_bank' => 'required|max:60',
-            'number' => 'integer|max:999999999999999999999999999999999999999999999999999999999999',
+            'number' => 'numeric|max:999999999999999999999999999999999999999999999999999999999999',
             'type' => 'required|max:15',
             'owner' => 'required|max:60',
             'identification_owner' => 'integer|max:999999999999999',
             'user_id' => 'integer',
         ]);
+
 
         if ($validator->fails()) {
             return response()->json(['result' => 'error', 'errors' => $validator->errors()]);
@@ -396,12 +397,20 @@ class UserController extends Controller
         $bank->user_id = $user->id;
         $bank->save();
         $banks = User_bank::where("user_id",$user->id)->get();
+
         return response()->json(['result' => 'ok', 'message' => "Cuenta de banco agregada con éxito.", "banks" => $banks]);
     }
 
 
 
-    public function update_bank(Request $request){
+    public function delete_bank(Request $request){
+        $bank = User_bank::find($request->id);
+        $bank->delete();
+        $user = Auth::user();
+        $banks = User_bank::where("user_id",$user->id)->get();
+
+        return response()->json(['result' => 'ok', 'message' => "La Cuenta de banco ha sido eliminada con éxito.", "banks" => $banks]);
+
 
     }
 

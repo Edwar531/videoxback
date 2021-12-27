@@ -51,12 +51,12 @@ class VideoController extends Controller
             ->join('users', 'videos.user_id', '=', 'users.id')
             ->select('videos.*','users.alias AS alias')
             ->where('videos.saved', "1")->orderBy("videos.created_at", "DESC")
-
             ->get();
         }
 
         return response()->json(["videos" => $videos, "tags" => $tags,"request"=>$request->all()]);
     }
+
     public function get_video(Request $request)
     {
         $video = Video::find($request->id);

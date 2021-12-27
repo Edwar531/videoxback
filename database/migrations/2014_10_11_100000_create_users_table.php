@@ -26,8 +26,8 @@ class CreateUsersTable extends Migration
             $table->string('email_token_validation')->nullable();;
             $table->enum('role',['Administrador','Cliente']);
 
-            $table->enum('nationality',['D.N.I','Licencia de conducir','Pasaporte','Visa o residencia permanente'])->nullable();
-            $table->enum('document_type',['Extranjera','Natural'])->nullable();
+            $table->enum('document_type',['D.N.I','Licencia de conducir','Pasaporte','Visa o residencia permanente'])->nullable();
+            $table->enum('nationality',['Extranjera','Natural'])->nullable();
             $table->string('document_number')->nullable();
 
             $table->enum('data_complete',[1,0])->default(0);

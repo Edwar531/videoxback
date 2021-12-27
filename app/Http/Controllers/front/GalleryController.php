@@ -141,6 +141,8 @@ class GalleryController extends Controller
             $url_path = asset('public/images/articles/' . $request->gallery_id) . '/' . $fileName . '.' . $extension;
             $local_path = public_path('images/articles/' . $request->gallery_id) . '/' . $fileName . '.' . $extension;
             $image = new Image;
+
+            $image->name = $fileName.$extension;
             $image->url_path = $url_path;
             $image->local_path = $local_path;
             $image->gallery_id = $request->gallery_id;

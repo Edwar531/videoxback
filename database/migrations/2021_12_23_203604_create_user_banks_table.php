@@ -19,10 +19,10 @@ class CreateUserBanksTable extends Migration
             $table->unsignedBigInteger('country_id');
             $table->foreign('country_id')->references('id')->on('countries')->nullable();
             $table->string("name_bank");
-            $table->string("number");
+            $table->text("number");
             $table->enum("type",["Ahorro","Corriente"]);
             $table->string("owner");
-            $table->string("identification_owner");
+            $table->text("identification_owner");
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->nullable();
             $table->timestamps();

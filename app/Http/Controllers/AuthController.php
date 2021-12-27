@@ -109,8 +109,8 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'alias' => 'required|unique:users|max:25',
             'name' => 'required|max:30',
-            'last_anme' => 'required|max:30',
-            'correo' => 'required|max:40|email|unique:users',
+            'last_name' => 'required|max:30',
+            'email' => 'required|max:40|email|unique:users',
             'password' => 'required|max:30|min:8',
             'confirm_password' => 'required|max:30|min:8',
         ]);
@@ -127,7 +127,7 @@ class AuthController extends Controller
         $user->alias = $request->alias;
         $user->email = $request->email;
         $user->name = $request->name;
-        $user->last_anme = $request->last_anme;
+        $user->last_name = $request->last_name;
         $user->password = bcrypt($request->password);
 
         $user->role = "Cliente";

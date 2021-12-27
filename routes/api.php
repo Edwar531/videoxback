@@ -34,7 +34,7 @@ Route::middleware(['cors'])->group(function () {
             Route::post("update-contact-information", 'front\UserController@update_contact_information');
 
             Route::post("update-paypal", 'front\UserController@update_paypal');
-            Route::post("add-bank", 'front\UserController@add_bank');
+            Route::post("delete-bank", 'front\UserController@delete_bank');
             Route::post("update-bank", 'front\UserController@update_bank');
 
 
