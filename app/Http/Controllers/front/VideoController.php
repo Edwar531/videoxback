@@ -16,6 +16,27 @@ use App\Models\User;
 class VideoController extends Controller
 {
 
+    // Teléfono o whatsapp:
+    // Pais estado ciudad:
+    public function data_completed($id){
+        $data_complete = 0;
+        $user = User::find($id);
+        if($user->document_type != null && $user->nationality != null && $user->document_number != null and $user->country != null ){
+            $data_complete = 1;
+        }
+
+        if($user->whatsapp == Null and $user->phone == Null){
+            $data_complete = 0;
+        }
+
+        if( $data_complete == 0){
+            return 0;
+        }else{
+            return 1;
+        }
+
+    }    
+
     public function videos(Request $request)
     {
         // $videos =   $videos =Video::where('saved',"1")->orderBy("created_at","DESC")->get();
@@ -75,6 +96,13 @@ class VideoController extends Controller
 
     public function new_video(Request $request)
     {
+
+        $data_completed = $this->data_completed($request->id);
+        if($data_completed == 0){
+            return response()->json(["result" => "redirect"]);
+        }
+        return response()->json(["video" => $video, "tags" => $tags]);
+
         $video = new Video;
         $video->user_id = $request->id;
         $video->save();

@@ -24,7 +24,7 @@ class UserController extends Controller
     public function user(Request $request)
     {
         $user = User::find($request->id);
-        $paises = ["Venezuela", "Ecuador", "México", "Colombia", "Perú", "Chile"];
+        
         $image = Image::where('user_id', $request->id)->first();
         if ($image) {
             $user->imagen_de_perfil = $image->url_path;
@@ -32,7 +32,9 @@ class UserController extends Controller
             $user->imagen_de_perfil = "";
         }
         $banks = User_bank::where("user_id",$user->id)->get();
-        return response()->json(compact("user", "paises","banks"));
+
+
+        return response()->json(compact("user", "countries","banks"));
     }
 
     public function generateNameImage($file)
@@ -432,8 +434,6 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $countries = Country::orderBy('name', 'asc')->get();
-
-        $cities = City::orderBy('name', 'asc')->get();
 
         if ($user->country_id) {
             $states = State::where("country_id", $user->country_id)->orderBy('name', 'asc')->get();
