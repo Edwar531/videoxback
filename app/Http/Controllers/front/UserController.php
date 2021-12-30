@@ -24,17 +24,30 @@ class UserController extends Controller
     public function user(Request $request)
     {
         $user = User::find($request->id);
-        
         $image = Image::where('user_id', $request->id)->first();
+
         if ($image) {
             $user->imagen_de_perfil = $image->url_path;
         } else {
             $user->imagen_de_perfil = "";
         }
+
         $banks = User_bank::where("user_id",$user->id)->get();
+        $countries = Country::orderBy('name', 'asc')->get();
+ 
+        if ($user->country_id) {
+            $states = State::where("country_id", $user->country_id)->orderBy('name', 'asc')->get();
+        } else {
+            $states = [];
+        }
 
+        if ($user->state_id) {
+            $cities = City::where("state_id", $user->state_id)->orderBy('name', 'asc')->get();
+        } else {
+            $cities = [];
+        }
 
-        return response()->json(compact("user", "countries","banks"));
+        return response()->json(compact("user", "countries","states","cities","banks"));
     }
 
     public function generateNameImage($file)
@@ -46,7 +59,6 @@ class UserController extends Controller
         }
         return $fileName;
     }
-
 
     public function delete_image_user(Request $request)
     {
@@ -269,11 +281,12 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->last_name = $request->last_name;
         $user->date_of_birth = $request->date_of_birth;
-
         $user->age = $age;
         $user->save();
 
-        return response()->json(['result' => 'ok', 'message' => "Datos actualizados con éxito.", "user" => $user]);
+        $banks = User_bank::where("user_id",$user->id)->get();
+
+        return response()->json(['result' => 'ok', 'message' => "Datos actualizados con éxito.", "user" => $user, "banks"=>$banks]);
     }
 
     public function update_document_data(Request $request)
@@ -294,8 +307,9 @@ class UserController extends Controller
         $user->document_number = $request->document_number;
         $user->nationality = $request->nationality;
         $user->save();
+        $banks = User_bank::where("user_id",$user->id)->get();
 
-        return response()->json(['result' => 'ok', 'message' => "Datos actualizados con éxito.", "user" => $user]);
+        return response()->json(['result' => 'ok', 'message' => "Datos actualizados con éxito.", "user" => $user,"banks"=>$banks]);
     }
 
     public function update_contact_information(Request $request)
@@ -342,7 +356,9 @@ class UserController extends Controller
         $user->address = $request->address;
         $user->save();
 
-        return response()->json(['result' => 'ok', 'message' => "Datos actualizados con éxito.", "user" => $user]);
+        $banks = User_bank::where("user_id",$user->id)->get();
+
+        return response()->json(['result' => 'ok', 'message' => "Datos actualizados con éxito.", "user" => $user ,"banks"=>$banks]);
     }
 
 
@@ -434,7 +450,7 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $countries = Country::orderBy('name', 'asc')->get();
-
+ 
         if ($user->country_id) {
             $states = State::where("country_id", $user->country_id)->orderBy('name', 'asc')->get();
         } else {
@@ -446,8 +462,9 @@ class UserController extends Controller
         } else {
             $cities = [];
         }
+        $banks = User_bank::where("user_id",$user->id)->get();
 
-        return response()->json(['countries' =>  $countries, 'states' =>  $states, 'cities' =>  $cities]);
+        return response()->json(['countries' =>  $countries, 'states' =>  $states, 'cities' =>  $cities,"banks"=>$banks]);
     }
 
     public function get_states(Request $request)

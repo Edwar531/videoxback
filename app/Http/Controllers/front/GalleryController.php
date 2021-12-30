@@ -15,6 +15,16 @@ use Illuminate\Support\Str;
 class GalleryController extends Controller
 {
     //
+    public function get_gallery(Request $request){
+        $gallery = Gallery::where("slug",$request->slug)->first();
+
+        if($gallery == null){
+            return response()->json(["result"=>"not-exist"]);
+        }
+
+        return response()->json($gallery);
+
+    }
 
     public function generate_code($code){
        $code = \Carbon\Carbon::now()->format("dmY").Str::random(8) .\Carbon\Carbon::now()->format("His");

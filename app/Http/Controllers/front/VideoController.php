@@ -11,11 +11,8 @@ use App\Models\Tag;
 use App\Models\VideoRelationsTag;
 use App\Models\User;
 
-
-
 class VideoController extends Controller
 {
-
     // Teléfono o whatsapp:
     // Pais estado ciudad:
     public function data_completed($id){
@@ -101,8 +98,7 @@ class VideoController extends Controller
         if($data_completed == 0){
             return response()->json(["result" => "redirect"]);
         }
-        return response()->json(["video" => $video, "tags" => $tags]);
-
+        
         $video = new Video;
         $video->user_id = $request->id;
         $video->save();

@@ -37,11 +37,6 @@ Route::middleware(['cors'])->group(function () {
             Route::post("delete-bank", 'front\UserController@delete_bank');
             Route::post("update-bank", 'front\UserController@update_bank');
 
-
-
-
-
-
             Route::get("data-contact", 'front\UserController@data_contact');
             Route::post("get-states", 'front\UserController@get_states');
             Route::post("get-cities", 'front\UserController@get_cities');
@@ -69,6 +64,8 @@ Route::middleware(['cors'])->group(function () {
         });
 
         Route::get('galleries', 'front\GalleryController@galleries');
+        Route::get('get-gallery', 'front\GalleryController@get_gallery');
+
         Route::get('get-video', 'front\VideoController@get_video');
         Route::get('videos','front\VideoController@videos');
         Route::get('mail-view','AuthController@mail_view');

@@ -16,6 +16,8 @@ class CreateGalleriesTable extends Migration
         Schema::create('galleries', function (Blueprint $table) {
             $table->id();
             $table->string('nombre',30)->nullable();
+            $table->string('slug')->nullable();
+
             $table->enum('estatus',['publicado','no-publicado','en-papelera'])->default('publicado');
             $table->enum('saved',[1,0])->default(0);
             $table->unsignedBigInteger('user_id');
